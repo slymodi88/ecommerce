@@ -30,16 +30,17 @@ class Branch(Timestamps):
 class BranchItem(Timestamps):
     branch = models.ForeignKey('Branch', on_delete=models.CASCADE)
     item = models.ForeignKey('products.Product', on_delete=models.CASCADE)
+    price = models.DecimalField(max_digits=20, decimal_places=2)
 
     def __str__(self):
         return str(self.id)
 
-    @property
-    def price(self):
-
-        x = BranchItem.objects.all().aggregate(Min(F('item__price')))
-        print(x)
-        # return self.item.aggregate(
-        #     price=Min(F('item__price'))
-        # )["price"]
-        return Decimal(1)
+    # @property
+    # def price(self):
+    #
+    #     x = BranchItem.objects.all().aggregate(Min(F('item__price')))
+    #     print(x)
+    #     # return self.item.aggregate(
+    #     #     price=Min(F('item__price'))
+    #     # )["price"]
+    #     return Decimal(1)
