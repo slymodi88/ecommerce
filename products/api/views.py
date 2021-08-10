@@ -25,9 +25,10 @@ class ProductViewSet(viewsets.ModelViewSet):
         city = City.objects.get(user=user)
         qs = Product.objects.filter(branchitem__branch__cities=city.id, branchitem__item__is_available=True) \
             .prefetch_related(
-            Prefetch('branchitem_set', queryset=BranchItem.objects.filter(branch__cities=city.id, item__is_available=True),to_attr='product_branchitem')) \
+            Prefetch('branchitem_set',
+                     queryset=BranchItem.objects.filter(branch__cities=city.id, item__is_available=True),
+                     to_attr='product_branchitem')) \
             .order_by('id', 'branchitem__item__price').distinct('id')
-
 
         queryset = self.paginate_queryset(self.filter_queryset(qs))
         serializer = ProductBranchItemSerializer(queryset, many=True)
@@ -43,7 +44,7 @@ class ProductViewSet(viewsets.ModelViewSet):
         return Response({"message": serializer.errors, "status": False}, status=status.HTTP_400_BAD_REQUEST)
 
     def retrieve(self, request, *args, **kwargs):
-        product = get_object_or_404(Product, id=kwargs["pk"])
+        product = get_object_or_404(Product.objects.filter(is_available=True), id=kwargs["pk"])
         serializer = ProductSerializer(product)
         return Response({"result": serializer.data, "message": "Done", "status": True}, status=status.HTTP_200_OK)
 
