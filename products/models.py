@@ -16,7 +16,7 @@ class Category(models.Model):
 
 class Product(Timestamps):
     price = models.DecimalField(max_digits=10, decimal_places=2, default=10)
-    isavailable = models.BooleanField(default=False)
+    is_available = models.BooleanField(default=False)
     title = models.CharField(max_length=255)
     image = models.ImageField()
     description = models.TextField(null=True, blank=True)

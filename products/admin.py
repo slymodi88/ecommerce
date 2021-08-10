@@ -8,7 +8,7 @@ class ProductAdmin(admin.ModelAdmin):
     list_display = ('id', 'title', 'description', 'created_at',)
 
     search_fields = ['title', 'description']
-    list_filter = ['isavailable', 'created_at', 'categories']
+    list_filter = ['is_available', 'created_at', 'categories']
 
 
 @admin.register(Category)
