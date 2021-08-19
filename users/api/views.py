@@ -13,6 +13,9 @@ class UserViewSet(viewsets.ViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
+    """
+       register api to register a new user to the system
+    """
     @action(methods=['post'], detail=False)
     def register(self, request):
         data = request.data
@@ -22,6 +25,9 @@ class UserViewSet(viewsets.ViewSet):
             return Response({"result": serializer.data, "message": "Done", "status": True}, status=status.HTTP_200_OK)
         return Response({"message": serializer.errors, "status": False}, status=status.HTTP_400_BAD_REQUEST)
 
+    """
+        login api to log the user to be allowed to use the system
+    """
     @action(methods=['post'], detail=False)
     def login(self, request):
         data = request.data

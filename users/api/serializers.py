@@ -10,37 +10,36 @@ from django.contrib.auth import authenticate
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('id', 'username', 'password', 'token')
+        fields = ('id', 'user_name', 'password', 'token')
         extra_kwargs = {"password": {"write_only": True}}
 
     def create(self, validated_data):
+        """
+
+        override the create method to store a hashed password in database and create token for each user
+        """
         password = validated_data.pop("password")
         hashed_password = make_password(password)
         user = User.objects.create(password=hashed_password, **validated_data)
         user_created_token = User.objects.create_token(user)
         return user_created_token
 
-    # def create(self, validated_data):
-    #     password = validated_data.pop("password")
-    #     hashed_password = make_password(password)
-    #     user = User.objects.create(password=hashed_password, **validated_data)
-    #     # user_created_token = create_token(users)
-    #     # return user_created_token
-    #     return user
-
 
 class UserLoginSerializer(serializers.ModelSerializer):
-    username = serializers.CharField(max_length=255)
+    user_name = serializers.CharField(max_length=255)
 
     class Meta:
         model = User
-        fields = ('id', 'username', 'password', 'token')
+        fields = ('id', 'user_name', 'password', 'token')
         extra_kwargs = {"password": {"write_only": True}}
 
     def validate(self, data):
-        username = data.get("username", None)
+        """
+        authenticate user data to log to the system
+        """
+        username = data.get("user_name", None)
         password = data.get("password")
-        user = authenticate(username=username, password=password)
+        user = authenticate(user_name=username, password=password)
         if user is None:
             raise serializers.ValidationError(
                 'users not found'
