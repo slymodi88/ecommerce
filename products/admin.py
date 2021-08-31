@@ -1,10 +1,10 @@
 from django.contrib import admin
 
-from products.models import Product, Category
+from products.models import Item, Category
 
 
-@admin.register(Product)
-class ProductAdmin(admin.ModelAdmin):
+@admin.register(Item)
+class ItemAdmin(admin.ModelAdmin):
     list_display = ('id', 'title', 'description', 'created_at',)
 
     search_fields = ['title', 'description']
