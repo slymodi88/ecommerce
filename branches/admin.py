@@ -15,4 +15,4 @@ class BranchAdmin(admin.ModelAdmin):
 
 @admin.register(BranchItem)
 class BranchItemAdmin(admin.ModelAdmin):
-    list_display = ('id',)
+    list_display = ('id', 'item', 'is_available', 'branch',)
