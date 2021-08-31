@@ -1,8 +1,4 @@
-from decimal import Decimal
-
 from django.db import models
-from django.db.models import F, Min
-
 from helpers.models import Timestamps
 
 
@@ -18,7 +14,7 @@ class City(Timestamps):
 
 class Branch(Timestamps):
     name = models.CharField(max_length=255)
-    cities = models.ManyToManyField('City')
+    cities = models.ForeignKey('City', on_delete=models.CASCADE, default=1)
 
     class Meta:
         verbose_name_plural = "Branches"
@@ -29,8 +25,12 @@ class Branch(Timestamps):
 
 class BranchItem(Timestamps):
     branch = models.ForeignKey('Branch', on_delete=models.CASCADE)
-    item = models.ForeignKey('products.Product', on_delete=models.CASCADE)
-    price = models.DecimalField(max_digits=20, decimal_places=2)
+    item = models.ForeignKey('products.Item', on_delete=models.CASCADE)
+    is_available = models.BooleanField(default=True)
+    price = models.DecimalField(max_digits=20, decimal_places=2, default=15)
+
+    class Meta:
+        unique_together = ('item', 'branch')
 
     def __str__(self):
         return str(self.id)
