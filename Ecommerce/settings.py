@@ -9,15 +9,24 @@ https://docs.djangoproject.com/en/3.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
-
+import os
+from configparser import RawConfigParser
 from pathlib import Path
 from datetime import timedelta
+
+config = RawConfigParser()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 from mixins.authentication import jwt_get_username_from_payload_handler
 
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+config = RawConfigParser()
+if os.path.isfile(os.path.join(BASE_DIR, 'config.ini')):
+    CONFIG_FILE = 'config.ini'
+else:
+    CONFIG_FILE = 'config_example.ini'
+config.read(os.path.join(BASE_DIR, CONFIG_FILE))
 BASE_DIR = Path(__file__).resolve().parent.parent
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
@@ -38,12 +47,17 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.gis',
     'rest_framework',
+    'branches',
     'products',
     'users',
     'carts',
     'orders',
+    'addresses',
     'rest_framework_jwt',
+    'django_extensions',
+
 ]
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
@@ -101,7 +115,7 @@ DATABASES = {
 
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
 
-        'NAME': "postgres",
+        'NAME': config.get('database', 'DB_NAME'),
 
         'USER': 'postgres',
 
@@ -118,6 +132,27 @@ DATABASES = {
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
 
+LOGGING = {
+    'version': 1,
+    'filters': {
+        'require_debug_true': {
+            '()': 'django.utils.log.RequireDebugTrue',
+        }
+    },
+    'handlers': {
+        'console': {
+            'level': 'DEBUG',
+            'filters': ['require_debug_true'],
+            'class': 'logging.StreamHandler',
+        }
+    },
+    'loggers': {
+        'django.db.backends': {
+            'level': 'DEBUG',
+            'handlers': ['console'],
+        }
+    }
+}
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -149,9 +184,20 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
+STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
 STATIC_URL = '/static/'
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
+
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'slymodi88@gmail.com'
+EMAIL_HOST_PASSWORD = '0506641547'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
