@@ -5,9 +5,11 @@ from carts.models import Cart, CartItem
 
 @admin.register(Cart)
 class CartAdmin(admin.ModelAdmin):
-    list_display = ("id", 'user')
+    # fields to be displayed in admin panel
+    list_display = ("id",)
 
 
 @admin.register(CartItem)
 class CartItemAdmin(admin.ModelAdmin):
+    # fields to be displayed in admin panel
     list_display = ("id", "cart", 'item',)
