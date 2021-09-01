@@ -1,10 +1,7 @@
-import jwt as jwt
+from django.contrib.auth import authenticate
 from django.contrib.auth.hashers import make_password
 from rest_framework import serializers
-
-from Ecommerce import settings
 from users.models import User
-from django.contrib.auth import authenticate
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -42,6 +39,6 @@ class UserLoginSerializer(serializers.ModelSerializer):
         user = authenticate(user_name=username, password=password)
         if user is None:
             raise serializers.ValidationError(
-                'users not found'
+                'user not found'
             )
         return user
