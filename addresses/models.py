@@ -13,4 +13,4 @@ class Address(Timestamps):
     user = models.ForeignKey('users.User', on_delete=models.CASCADE, default=1)
 
     def __str__(self):
-        return self.address_info
+        return str(self.city)
