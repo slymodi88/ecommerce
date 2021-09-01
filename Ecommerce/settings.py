@@ -119,7 +119,7 @@ DATABASES = {
 
         'USER': 'postgres',
 
-        'PASSWORD': '123456',
+        'PASSWORD': config.get('database', 'DB_PASSWORD'),
 
         'HOST': '127.0.0.1',
 
@@ -197,7 +197,9 @@ EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
-EMAIL_HOST_USER = 'slymodi88@gmail.com'
-EMAIL_HOST_PASSWORD = '0506641547'
+EMAIL_HOST_USER = config.get('email', 'USER')
+EMAIL_HOST_PASSWORD = config.get('email', 'PASSWORD')
+
+
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
