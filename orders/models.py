@@ -13,13 +13,16 @@ class Order(Timestamps):
     grand_total = models.DecimalField(max_digits=20, decimal_places=2, null=True, blank=True)
     delivery_date = models.DateField(null=True, blank=True, default=timezone.now().date())
     shipping_fee = models.DecimalField(max_digits=20, decimal_places=2, null=True, blank=True)
-    address = models.ForeignKey("addresses.Address", on_delete=models.CASCADE, default=1)
+    address = models.ForeignKey("addresses.Address", on_delete=models.CASCADE, default=4)
 
     def __str__(self):
         return str(self.id)
 
 
 class OrderProduct(Timestamps):
+    """
+    store order_product data (order_id - item_id - quantity - price)
+    """
     order = models.ForeignKey('Order', on_delete=models.CASCADE)
     item = models.ForeignKey('products.Item', on_delete=models.CASCADE)
     quantity = models.FloatField()

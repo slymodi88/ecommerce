@@ -34,9 +34,4 @@ class UserManager(BaseUserManager):
         user.save()
         return user
 
-    # def create_token(self, user):
-    #     token = Token.objects.create(user=user)
-    #     user.token = token.key
-    #     user.save()
-    #     print(token.key)
-    #     return user
+
